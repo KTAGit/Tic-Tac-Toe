@@ -9,6 +9,42 @@ class GameBoard {
         this.board[row][col] = playerSymbol
         console.log(this.board)
     }
+
+    checkWinner(){
+        const b = this.board
+
+        for (let i = 0; i < b.length; i++) {
+            // Check Row
+            if (b[i][0] !== "" && b[i][0] === b[i][1] && b[i][1] === b[i][2]) {
+                return b[i][0]
+            }
+            // Check column
+            if (b[0][i] !== "" && b[0][i] === b[1][i] && b[1][i] === b[2][i]) {
+                return b[0][i]
+            }
+        }
+        // Check diagonals
+        if (b[0][0] !== "" && b[0][0] === b[1][1] && b[1][1] === b[2][2]) {
+            return b[0][0]
+        }
+        if (b[0][2] !== "" && b[0][2] === b[1][1] && b[1][1] === b[2][0]) {
+            return b[0][2]
+        }
+        // No winner
+        return null
+    }
+
+    checkTie(){
+        for (const row of this.board) {
+            for (const cell of row) {
+                if (cell === "") {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
 }
 
 // A class to keep track of a player name and symbol
@@ -35,6 +71,18 @@ class controller {
 
         this.gameBoard.makeMove(row, col, this.currentPlayer.symbol)
 
+        const result = this.gameBoard.checkWinner()
+        const tie = this.gameBoard.checkTie()
+
+        if(result){
+            console.log(`${result} Wins!`)
+            return `${result} Wins!`
+        }
+        if (tie){
+            console.log("It's a tie")
+            return "It's a tie"
+        }
+        
         this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1
     }
 }
