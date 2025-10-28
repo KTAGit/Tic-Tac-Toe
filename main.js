@@ -87,12 +87,50 @@ class controller {
     }
 }
 
-
 const gameBoard = new GameBoard()
 const player1 = new Player("Alice", "X")
 const player2 = new Player("Bob", "O")
 const game = new controller(gameBoard, player1, player2)
 
+const displayController = (function(){
+
+    const container = document.querySelector(".container")
+
+    const renderBoard = function (){
+        container.innerHTML = ""
+        const board = gameBoard.board
+        
+        for (let i = 0; i < board.length; i++) {
+
+            const row = board[i]
+        
+            for (let j = 0; j < row.length; j++) {
+                let divBox = document.createElement("div")
+                const symbol = row[j]
+                divBox.classList.add("div-box")
+                divBox.textContent = symbol
+                container.appendChild(divBox)
+                divBox.dataset.row = i
+                divBox.dataset.col = j
+            }
+        }
+        const divs = document.querySelectorAll(".div-box")
+        divs.forEach((box) => {
+            box.addEventListener("click",  () => {
+                const result = gameBoard.checkWinner()
+                const tie = gameBoard.checkTie()
+                
+                if (box.textContent === "" && result === null && tie === false) {
+                    game.playRound(box.dataset.row, box.dataset.col)
+                    displayController.renderBoard()
+                }
+            })
+        })
+        
+    }
+    
+    return {renderBoard}
+})()
+
 game.playRound(0, 1)
-
-
+displayController.renderBoard()
