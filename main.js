@@ -1,3 +1,75 @@
+// Initial values for player, names are empty, scores start at 0
+let playerOneScore = 0
+let playerTwoScore = 0
+let playerOneName 
+let playerTwoName
+
+// A class to keep track of a player name and symbol
+class Player{
+    constructor(name, symbol, score){
+        this.name = name
+        this.symbol = symbol
+        this.score = score
+    }
+}
+
+const player1 = new Player(playerOneName, "X", playerOneScore)
+const player2 = new Player(playerTwoName, "O", playerTwoScore)
+
+// Handles collecting player names from the form and starts the game when both names are provided
+function startGame(){
+    const startBtn = document.querySelector(".start-game-btn")
+    const form = document.querySelector("form")
+    const overlay = document.querySelector(".form-overlay")
+    let pOneScore = document.createElement("div")
+    let pTwoScore = document.createElement("div")
+
+    startBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+
+        playerOneName = document.querySelector("#player-one-name").value
+        playerTwoName = document.querySelector("#player-two-name").value
+        
+        
+        if (playerOneName && playerTwoName) {
+            const playerInfo = document.querySelector(".player-info")
+            let pOneName = document.createElement("div")
+            let pTwoName = document.createElement("div")
+            pOneName.classList.add("p-one-name")
+            pTwoName.classList.add("p-two-name")
+            pOneScore.classList.add("p-one-score")
+            pTwoScore.classList.add("p-two-score")
+
+            pOneName.textContent = playerOneName
+            pTwoName.textContent = playerTwoName
+            pOneScore.textContent = player1.score
+            pTwoScore.textContent = player2.score
+
+            playerInfo.appendChild(pOneName)
+            playerInfo.appendChild(pTwoName)
+            playerInfo.appendChild(pOneScore)
+            playerInfo.appendChild(pTwoScore)
+
+
+            form.style.display = "none"
+            overlay.style.display = "none"
+
+            player1.name = playerOneName
+            player2.name = playerTwoName
+            
+            displayController.renderBoard()
+
+        }else {
+            return
+        }
+        
+        
+    })
+    pOneScore.textContent = player1.score
+    pTwoScore.textContent = player2.score
+
+}
+startGame()
 
 // Tic Tac Toe gameboard storage
 class GameBoard {
@@ -47,13 +119,7 @@ class GameBoard {
     }
 }
 
-// A class to keep track of a player name and symbol
-class Player{
-    constructor(name, symbol){
-        this.name = name
-        this.symbol = symbol
-    }
-}
+const gameBoard = new GameBoard()
 
 // A class to manage the game flow
 class controller {
@@ -62,6 +128,7 @@ class controller {
         this.player1 = player1
         this.player2 = player2
         this.currentPlayer = player1
+
     }
 
     playRound(row, col){
@@ -75,7 +142,12 @@ class controller {
         const tie = this.gameBoard.checkTie()
 
         if(result){
-            console.log(`${result} Wins!`)
+            this.currentPlayer.score += 1
+
+            document.querySelector(".p-one-score").textContent = player1.score
+            document.querySelector(".p-two-score").textContent = player2.score
+
+            console.log(`${this.currentPlayer.name}.   (${player1.score}) AND ${player2.score} Wins!`)
             return `${result} Wins!`
         }
         if (tie){
@@ -84,18 +156,13 @@ class controller {
         }
         
         this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1
+
     }
 }
 
-let playerOneScore = 0
-let playerTwoScore = 0
-let playerOneName 
-let playerTwoName
-const player1 = new Player(playerOneName, "X")
-const player2 = new Player(playerTwoName, "O")
-const gameBoard = new GameBoard()
 const game = new controller(gameBoard, player1, player2)
 
+// Handles rendering the game board and updating it after each move
 const displayController = (function(){
 
     const container = document.querySelector(".container")
@@ -136,51 +203,19 @@ const displayController = (function(){
     return {renderBoard}
 })()
 
-function startGame(){
-    const startBtn = document.querySelector(".start-game-btn")
-    const form = document.querySelector("form")
-    const overlay = document.querySelector(".form-overlay")
-    
+// Initializes event listeners for restarting the game
+gameReset = function() {
+    const playAgainBtn = document.querySelector(".play-again-btn")
+    const NewMatchBtn = document.querySelector(".new-match-btn")
 
-    startBtn.addEventListener("click", (e) => {
-        e.preventDefault()
-
-        playerOneName = document.querySelector("#player-one-name").value
-        playerTwoName = document.querySelector("#player-two-name").value
-        
-        
-        if (playerOneName && playerTwoName) {
-            const playerInfo = document.querySelector(".player-info")
-            let pOneName = document.createElement("div")
-            let pTwoName = document.createElement("div")
-            let pOneScore = document.createElement("div")
-            let pTwoScore = document.createElement("div")
-            pOneName.classList.add("p-one-name")
-            pTwoName.classList.add("p-two-name")
-            pOneScore.classList.add("p-one-score")
-            pTwoScore.classList.add("p-two-score")
-
-            pOneName.textContent = playerOneName
-            pTwoName.textContent = playerTwoName
-            pOneScore.textContent = playerOneScore
-            pTwoScore.textContent = playerTwoScore
-
-            playerInfo.appendChild(pOneName)
-            playerInfo.appendChild(pTwoName)
-            playerInfo.appendChild(pOneScore)
-            playerInfo.appendChild(pTwoScore)
-
-
-            form.style.display = "none"
-            overlay.style.display = "none"
-
-        }else {
-            return
-        }
-        
+    playAgainBtn.addEventListener("click", () => {
+        gameBoard.board = [["","",""], ["","",""], ["","",""]]
+        displayController.renderBoard()
+        console.log("Rendered new board")
     })
 
-}
-startGame()
-displayController.renderBoard()
+    NewMatchBtn.addEventListener("click", () => {
+        location.reload()
+    })
+}()
 
