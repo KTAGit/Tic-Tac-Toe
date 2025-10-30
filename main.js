@@ -68,7 +68,7 @@ class controller {
         if (this.gameBoard.board[row][col] !== "") {
             return
         }
-
+        
         this.gameBoard.makeMove(row, col, this.currentPlayer.symbol)
 
         const result = this.gameBoard.checkWinner()
@@ -87,9 +87,13 @@ class controller {
     }
 }
 
+let playerOneScore = 0
+let playerTwoScore = 0
+let playerOneName 
+let playerTwoName
+const player1 = new Player(playerOneName, "X")
+const player2 = new Player(playerTwoName, "O")
 const gameBoard = new GameBoard()
-const player1 = new Player("Alice", "X")
-const player2 = new Player("Bob", "O")
 const game = new controller(gameBoard, player1, player2)
 
 const displayController = (function(){
@@ -132,5 +136,51 @@ const displayController = (function(){
     return {renderBoard}
 })()
 
-game.playRound(0, 1)
+function startGame(){
+    const startBtn = document.querySelector(".start-game-btn")
+    const form = document.querySelector("form")
+    const overlay = document.querySelector(".form-overlay")
+    
+
+    startBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+
+        playerOneName = document.querySelector("#player-one-name").value
+        playerTwoName = document.querySelector("#player-two-name").value
+        
+        
+        if (playerOneName && playerTwoName) {
+            const playerInfo = document.querySelector(".player-info")
+            let pOneName = document.createElement("div")
+            let pTwoName = document.createElement("div")
+            let pOneScore = document.createElement("div")
+            let pTwoScore = document.createElement("div")
+            pOneName.classList.add("p-one-name")
+            pTwoName.classList.add("p-two-name")
+            pOneScore.classList.add("p-one-score")
+            pTwoScore.classList.add("p-two-score")
+
+            pOneName.textContent = playerOneName
+            pTwoName.textContent = playerTwoName
+            pOneScore.textContent = playerOneScore
+            pTwoScore.textContent = playerTwoScore
+
+            playerInfo.appendChild(pOneName)
+            playerInfo.appendChild(pTwoName)
+            playerInfo.appendChild(pOneScore)
+            playerInfo.appendChild(pTwoScore)
+
+
+            form.style.display = "none"
+            overlay.style.display = "none"
+
+        }else {
+            return
+        }
+        
+    })
+
+}
+startGame()
 displayController.renderBoard()
+
