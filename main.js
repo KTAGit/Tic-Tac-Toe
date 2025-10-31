@@ -79,7 +79,6 @@ class GameBoard {
 
     makeMove(row, col, playerSymbol) {
         this.board[row][col] = playerSymbol
-        console.log(this.board)
     }
 
     checkWinner(){
@@ -144,12 +143,21 @@ class controller {
 
         const result = this.gameBoard.checkWinner()
         const tie = this.gameBoard.checkTie()
+        const announceResult = document.createElement("div")
+        announceResult.classList.add("announce-result")
 
         if(result){
             this.currentPlayer.score += 1
 
             document.querySelector(".p-one-score").textContent = player1.score
             document.querySelector(".p-two-score").textContent = player2.score
+            if (!tie) {
+                announceResult.textContent = `${this.currentPlayer.name} wins this round! 🎉`
+                document.body.appendChild(announceResult)
+                setTimeout(() => {
+                    announceResult.remove()
+                }, 2000)
+            }
 
             if (player1.score > player2.score) {
                 crown.style.gridColumn = "1 / 2"
@@ -165,11 +173,14 @@ class controller {
             }else {
                 document.querySelector(".crown-png")?.remove()
             }
-            console.log(`${this.currentPlayer.name}.   (${player1.score}) AND ${player2.score} Wins!`)
             return `${result} Wins!`
         }
         if (tie){
-            console.log("It's a tie")
+            announceResult.textContent = "It's a tie!"
+            document.body.appendChild(announceResult)
+            setTimeout(() => {
+                    announceResult.remove()
+                }, 2000)
             return "It's a tie"
         }
         
