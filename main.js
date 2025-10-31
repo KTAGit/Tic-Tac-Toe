@@ -138,6 +138,10 @@ class controller {
         
         this.gameBoard.makeMove(row, col, this.currentPlayer.symbol)
 
+        const crown = document.createElement("img")
+        crown.classList.add("crown-png")
+        crown.src = "Icon/Crown.png"
+
         const result = this.gameBoard.checkWinner()
         const tie = this.gameBoard.checkTie()
 
@@ -147,6 +151,20 @@ class controller {
             document.querySelector(".p-one-score").textContent = player1.score
             document.querySelector(".p-two-score").textContent = player2.score
 
+            if (player1.score > player2.score) {
+                crown.style.gridColumn = "1 / 2"
+                crown.style.gridRow = "1 / 2"
+                document.querySelector(".crown-png")?.remove()
+                document.querySelector(".player-info").appendChild(crown)
+            }
+            else if (player1.score < player2.score) {
+                crown.style.gridColumn = "3 / 4"
+                crown.style.gridRow = "1 / 2"
+                document.querySelector(".crown-png")?.remove()
+                document.querySelector(".player-info").appendChild(crown)
+            }else {
+                document.querySelector(".crown-png")?.remove()
+            }
             console.log(`${this.currentPlayer.name}.   (${player1.score}) AND ${player2.score} Wins!`)
             return `${result} Wins!`
         }
@@ -211,7 +229,6 @@ gameReset = function() {
     playAgainBtn.addEventListener("click", () => {
         gameBoard.board = [["","",""], ["","",""], ["","",""]]
         displayController.renderBoard()
-        console.log("Rendered new board")
     })
 
     NewMatchBtn.addEventListener("click", () => {

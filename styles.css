@@ -218,7 +218,7 @@ input {
     width: 90%;
     height: 60%;
     align-self: center;
-    justify-self: center;
+    justify-self: start;
     border: none;
     border-radius: 5px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -233,7 +233,7 @@ input {
     width: 90%;
     height: 60%;
     align-self: center;
-    justify-self: center;
+    justify-self: end;
     border: none;
     border-radius: 5px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -246,4 +246,74 @@ input {
 .button-container > button:hover {
     cursor: pointer;
     box-shadow: 0px 0px 2px 5px #ffffff;
+}
+
+.crown-png {
+    height: 50px;
+    width: 70px;
+}
+
+@media (max-width: 620px) {
+    form {
+        display: grid;
+        grid-template-rows: 1fr 2fr 1.5fr;
+        align-items: center;
+        position: fixed;
+        top: 41%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 540px;
+        width: 400px;
+        background-color: #5A9BE0;
+        box-shadow: 0 4px 20px rgba(74, 74, 74, 0.3);
+        border-radius: 8px;
+    }
+
+    h1 {
+        width: 100%;
+        font-size: 50px;
+    }
+
+    .name-container {
+        display: grid;
+        grid-row: 2 / 3;
+        grid-template-columns: 100%;
+        grid-template-rows: 1fr 1fr 1fr;
+        width: 100%;
+        height: 200px;
+    }
+
+    .name-container > :nth-child(-n+2) {
+        grid-row: 1 / 2;
+        grid-column: 1 / 2;
+    }
+
+    h2 {
+        grid-row: 2 / 3;
+        grid-column: 1 / 2;
+        align-self: center;
+    }
+
+    .name-container > :nth-last-child(-n+2) {
+       grid-row: 3 / 4;
+       grid-column: 1 / 2;
+    }
+
+    label {
+        color: white;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 20px;
+        font-weight: bolder;
+        align-self: self-start;
+    }
+
+    input {
+        width: 215px;
+        height: 35px;
+        font-size: 20px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        align-self:  self-end;
+        border: none;
+        border-radius: 5px;
+    }
 }
